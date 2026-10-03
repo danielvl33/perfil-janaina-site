@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Depoimentos | Mente Humano Animal</title>
+    <meta name="description" content="Confira relatos e experiências compartilhados por pessoas que conheceram o trabalho de comportamento e bem-estar animal.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body class="testimonials-page">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+        <i class="fa-solid fa-moon"></i>
+    </button>
+
+    <header class="page-header">
+        <nav class="site-nav" aria-label="Navegação principal">
+            <a class="site-nav-brand" href="index.html#inicio">Dra. Janaína Cirqueira</a>
+            <div class="site-nav-links">
+                <a href="index.html#inicio">Início</a>
+                <a href="index.html#sobre">Sobre</a>
+                <a href="index.html#mentorias">Serviços</a>
+                <a class="site-nav-featured" href="depoimentos.html" aria-current="page">Depoimentos</a>
+                <a href="index.html#contato">Contato</a>
+            </div>
+        </nav>
+        <div class="page-header-content">
+            <span>Experiências compartilhadas</span>
+            <h1>Depoimentos</h1>
+            <p>Confira alguns relatos e experiências compartilhados por pessoas que conheceram nosso trabalho.</p>
+        </div>
+    </header>
+
+    <main class="testimonials-main">
+        <section class="testimonials-section" aria-labelledby="testimonials-title">
+            <h2 class="visually-hidden" id="testimonials-title">Galeria de depoimentos</h2>
+            <div class="testimonials-gallery" id="testimonialsGallery" aria-live="polite" aria-busy="true"></div>
+            <p class="testimonials-privacy">Depoimentos publicados com autorização de seus respectivos autores.</p>
+        </section>
+    </main>
+
+    <dialog class="testimonial-lightbox" id="testimonialLightbox" aria-label="Visualização ampliada dos depoimentos">
+        <div class="lightbox-toolbar">
+            <span class="lightbox-counter" id="lightboxCounter"></span>
+            <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Fechar visualização" title="Fechar (Esc)">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </div>
+        <button class="lightbox-arrow lightbox-previous" id="lightboxPrevious" type="button" aria-label="Depoimento anterior" title="Anterior (←)">
+            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <img class="lightbox-image" id="lightboxImage" src="assets/depoimentos/depoimento-01.jpeg" alt="">
+        <button class="lightbox-arrow lightbox-next" id="lightboxNext" type="button" aria-label="Próximo depoimento" title="Próximo (→)">
+            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
+    </dialog>
+
+    <footer>
+        <div class="footer-content">
+            <h3>Dra. Janaína Cirqueira</h3>
+            <p>Médica Veterinária | Comportamento e Reabilitação Animal</p>
+            <nav class="footer-social" aria-label="Redes sociais">
+                <a data-instagram-link role="link" tabindex="0" aria-disabled="true" title="Instagram — link em breve" aria-label="Visitar Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+                <a href="https://wa.me/557799698881?text=Ol%C3%A1%21+Preciso+de+ajuda+com+meu+pet+e+vi+que+voc%C3%AA+trabalha+com+comportamento+e+sa%C3%BAde+emocional.+Pode+me+orientar%3F" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+                <a href="https://youtube.com/@mestredaconcienciaanimal?si=yA33mfYnlB5Yrd-f" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
+                <a href="https://www.tiktok.com/@dracomportamental?_r=1&amp;_t=ZS-9AFgJZx7Hey" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
+            </nav>
+            <p class="copyright">© <span id="year"></span> Dra. Janaína Cirqueira. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <a class="whatsapp-float" href="https://wa.me/557799698881?text=Ol%C3%A1%21+Preciso+de+ajuda+com+meu+pet+e+vi+que+voc%C3%AA+trabalha+com+comportamento+e+sa%C3%BAde+emocional.+Pode+me+orientar%3F" target="_blank" rel="noopener noreferrer" aria-label="Abrir WhatsApp" title="Fale comigo pelo WhatsApp">
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+    </a>
+
+    <script src="script.js"></script>
+</body>
+</html>
