@@ -523,6 +523,220 @@ a {
     margin-bottom: 28px;
 }
 
+.contact-section {
+    padding: 100px 4%;
+    background: var(--background);
+}
+
+.contact-container {
+    width: min(1150px, 100%);
+    margin: auto;
+}
+
+.contact-section .section-title {
+    margin-bottom: 45px;
+}
+
+.contact-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, .8fr);
+    gap: 28px;
+    align-items: stretch;
+}
+
+.social-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.social-card {
+    display: flex;
+    min-height: 150px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 8px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--card);
+    color: var(--text);
+    box-shadow: var(--shadow);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.social-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--secondary);
+    box-shadow: 0 18px 42px rgba(35, 50, 40, .15);
+}
+
+.social-card > i {
+    margin-bottom: 4px;
+    color: var(--primary);
+    font-size: 1.65rem;
+}
+
+.social-card > span {
+    font-weight: 700;
+    font-size: 1.02rem;
+}
+
+.social-card small {
+    color: var(--muted);
+    font-size: .82rem;
+    line-height: 1.45;
+}
+
+.social-card-whatsapp {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: #fff;
+}
+
+.social-card-whatsapp > i,
+.social-card-whatsapp small {
+    color: rgba(255, 255, 255, .88);
+}
+
+.social-card-instagram > i { color: #c13584; }
+.social-card-youtube > i { color: #d71920; }
+.social-card-tiktok > i { color: #20a9a5; }
+
+.social-card[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: .72;
+}
+
+.contact-qr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 24px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--card);
+    color: var(--text);
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.contact-qr-copy {
+    max-width: 310px;
+}
+
+.contact-eyebrow {
+    color: var(--secondary);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.contact-qr h3 {
+    margin: 7px 0 8px;
+    font-family: "Playfair Display", serif;
+    font-size: 1.45rem;
+    line-height: 1.25;
+}
+
+.contact-qr-copy > p {
+    color: var(--muted);
+    font-size: .9rem;
+}
+
+.contact-qr-copy .contact-phone {
+    margin-top: 10px;
+    font-size: .82rem;
+}
+
+.contact-phone strong {
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.contact-qr-image {
+    display: block;
+    width: min(200px, 70vw);
+    height: auto;
+    aspect-ratio: 1;
+    margin: 18px auto;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+}
+
+.contact-qr-button {
+    gap: 9px;
+    min-height: 48px;
+}
+
+.whatsapp-float {
+    position: fixed;
+    z-index: 1100;
+    right: 20px;
+    bottom: 20px;
+    display: grid;
+    width: 60px;
+    height: 60px;
+    place-items: center;
+    border: 2px solid rgba(255, 255, 255, .9);
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(16, 80, 47, .32);
+    font-size: 1.8rem;
+    animation: whatsapp-pulse 2.8s ease-out infinite;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 30px rgba(16, 80, 47, .42);
+    animation-play-state: paused;
+}
+
+.whatsapp-float::before {
+    position: absolute;
+    right: calc(100% + 12px);
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--card);
+    color: var(--text);
+    content: "Fale comigo pelo WhatsApp";
+    font-family: "DM Sans", sans-serif;
+    font-size: .82rem;
+    font-weight: 600;
+    line-height: 1.3;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(5px);
+    transition: opacity .2s ease, transform .2s ease;
+    white-space: nowrap;
+    box-shadow: var(--shadow);
+}
+
+.whatsapp-float:hover::before,
+.whatsapp-float:focus-visible::before {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+@keyframes whatsapp-pulse {
+    0%, 75%, 100% { box-shadow: 0 8px 24px rgba(16, 80, 47, .32), 0 0 0 0 rgba(37, 211, 102, .32); }
+    40% { box-shadow: 0 8px 24px rgba(16, 80, 47, .32), 0 0 0 10px rgba(37, 211, 102, 0); }
+}
+
+a:focus-visible,
+button:focus-visible {
+    outline: 3px solid var(--secondary);
+    outline-offset: 4px;
+}
+
 footer {
     background: #202a23;
     color: white;
@@ -575,7 +789,7 @@ footer {
     position: fixed;
     z-index: 1000;
     right: 20px;
-    bottom: 20px;
+    bottom: 92px;
     width: 50px;
     height: 50px;
     border: none;
@@ -602,13 +816,30 @@ footer {
     .cards-grid, .mentorias-grid { grid-template-columns: repeat(2, 1fr); }
     .stats { grid-template-columns: 1fr; }
     .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,.12); }
+    .contact-layout { grid-template-columns: 1fr; }
+    .contact-qr { width: min(100%, 520px); margin: auto; }
 }
 
 @media (max-width: 600px) {
     .hero { min-height: 720px; }
     .cards-grid, .mentorias-grid { grid-template-columns: 1fr; }
     .section { padding: 70px 0; }
+    .contact-section { padding: 75px 14px 100px; }
+    .contact-section .section-title { margin-bottom: 32px; }
+    .social-cards { gap: 12px; }
+    .social-card { min-height: 145px; padding: 18px 15px; }
+    .social-card > span { font-size: .92rem; }
+    .social-card small { font-size: .76rem; }
+    .contact-qr { padding: 26px 18px; }
     .gray-section { padding-left: 4%; padding-right: 4%; }
     .highlight-card { padding: 30px; }
     .experience-number strong { font-size: 90px; }
+    .whatsapp-float { right: 15px; bottom: 16px; width: 56px; height: 56px; }
+    .whatsapp-float::before { display: none; }
+    .theme-toggle { right: 19px; bottom: 84px; }
+}
+
+@media (max-width: 380px) {
+    .social-cards { grid-template-columns: 1fr; }
+    .social-card { min-height: 118px; }
 }

@@ -12,7 +12,7 @@
 <body>
 
     <!-- BOTÃO TEMA -->
-    <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
         <i class="fa-solid fa-moon"></i>
     </button>
 
@@ -35,7 +35,7 @@
                 <a href="#mentorias" class="btn secondary">Minhas mentorias</a>
             </div>
             <div class="social-links">
-                <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a data-instagram-link role="link" tabindex="0" aria-disabled="true" title="Instagram — link em breve" aria-label="Visitar Instagram"><i class="fa-brands fa-instagram"></i></a>
                 <a href="https://wa.me/557799698881?text=Ol%C3%A1%21+Preciso+de+ajuda+com+meu+pet+e+vi+que+voc%C3%AA+trabalha+com+comportamento+e+sa%C3%BAde+emocional.+Pode+me+orientar%3F" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
                 <a href="https://youtube.com/@mestredaconcienciaanimal?si=yA33mfYnlB5Yrd-f" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
                 <a href="https://www.tiktok.com/@dracomportamental?_r=1&amp;_t=ZS-9AFgJZx7Hey" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
@@ -174,7 +174,7 @@
                 <article class="mentoria">
                     <span class="number">04</span>
                     <i class="fa-solid fa-heart"></i>
-                    <h3>Mentoria Mente & Vínculo</h3>
+                    <h3>Mentoria Mente &amp; Vínculo</h3>
                     <p>Uma abordagem dedicada à construção de vínculo e compreensão comportamental.</p>
                     <a href="#" class="learn-more">Saiba mais →</a>
                 </article>
@@ -198,6 +198,55 @@
             </div>
         </section>
 
+        <section class="contact-section" id="contato" aria-labelledby="contact-title">
+            <div class="contact-container">
+                <div class="section-title">
+                    <span>Redes sociais e contato</span>
+                    <h2 id="contact-title">Conecte-se comigo</h2>
+                    <p>Quer saber mais sobre comportamento, saúde emocional e bem-estar do seu pet? Entre em contato ou acompanhe meus conteúdos nas redes sociais.</p>
+                </div>
+
+                <div class="contact-layout">
+                    <nav class="social-cards" aria-label="Redes sociais da Dra. Janaína">
+                        <a class="social-card social-card-whatsapp" href="https://wa.me/557799698881?text=Ol%C3%A1%21+Preciso+de+ajuda+com+meu+pet+e+vi+que+voc%C3%AA+trabalha+com+comportamento+e+sa%C3%BAde+emocional.+Pode+me+orientar%3F" target="_blank" rel="noopener noreferrer" aria-label="Falar pelo WhatsApp" title="Falar pelo WhatsApp">
+                            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+                            <span>Falar pelo WhatsApp</span>
+                            <small>Atendimento direto e acolhedor</small>
+                        </a>
+                        <a class="social-card social-card-instagram" data-instagram-link role="link" tabindex="0" aria-disabled="true" title="Instagram — link em breve" aria-label="Visitar Instagram">
+                            <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+                            <span>Visitar Instagram</span>
+                            <small data-instagram-status>Link em breve</small>
+                        </a>
+                        <a class="social-card social-card-youtube" href="https://youtube.com/@mestredaconcienciaanimal?si=yA33mfYnlB5Yrd-f" target="_blank" rel="noopener noreferrer" aria-label="Assista no YouTube" title="Assista no YouTube">
+                            <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+                            <span>Assista no YouTube</span>
+                            <small>Conteúdos sobre comportamento animal</small>
+                        </a>
+                        <a class="social-card social-card-tiktok" href="https://www.tiktok.com/@dracomportamental?_r=1&amp;_t=ZS-9AFgJZx7Hey" target="_blank" rel="noopener noreferrer" aria-label="Siga no TikTok" title="Siga no TikTok">
+                            <i class="fa-brands fa-tiktok" aria-hidden="true"></i>
+                            <span>Siga no TikTok</span>
+                            <small>Dicas e conteúdos em vídeos curtos</small>
+                        </a>
+                    </nav>
+
+                    <aside class="contact-qr" aria-labelledby="contact-qr-title">
+                        <div class="contact-qr-copy">
+                            <span class="contact-eyebrow">Atendimento pelo WhatsApp</span>
+                            <h3 id="contact-qr-title">Fale comigo pelo WhatsApp</h3>
+                            <p>Escaneie o QR Code para falar comigo pelo WhatsApp.</p>
+                            <p class="contact-phone">WhatsApp <strong>+55 (77) 9969-8881</strong></p>
+                        </div>
+                        <img class="contact-qr-image" src="img/whatsapp-qr.svg" width="200" height="200" alt="QR Code para abrir o WhatsApp com a mensagem de contato">
+                        <a class="btn primary contact-qr-button" href="https://wa.me/557799698881?text=Ol%C3%A1%21+Preciso+de+ajuda+com+meu+pet+e+vi+que+voc%C3%AA+trabalha+com+comportamento+e+sa%C3%BAde+emocional.+Pode+me+orientar%3F" target="_blank" rel="noopener noreferrer" aria-label="Abrir WhatsApp" title="Abrir WhatsApp">
+                            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+                            Abrir WhatsApp
+                        </a>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
         <!-- CTA -->
         <section class="cta">
             <div>
@@ -215,7 +264,7 @@
             <h3>Dra. Janaína Cirqueira</h3>
             <p>Médica Veterinária | Comportamento e Reabilitação Animal</p>
             <div class="footer-social">
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a data-instagram-link role="link" tabindex="0" aria-disabled="true" title="Instagram — link em breve" aria-label="Visitar Instagram"><i class="fa-brands fa-instagram"></i></a>
                 <a href="https://wa.me/557799698881?text=Ol%C3%A1%21+Preciso+de+ajuda+com+meu+pet+e+vi+que+voc%C3%AA+trabalha+com+comportamento+e+sa%C3%BAde+emocional.+Pode+me+orientar%3F" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
                 <a href="https://youtube.com/@mestredaconcienciaanimal?si=yA33mfYnlB5Yrd-f" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
                 <a href="https://www.tiktok.com/@dracomportamental?_r=1&amp;_t=ZS-9AFgJZx7Hey" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
@@ -223,6 +272,10 @@
             <p class="copyright">© <span id="year"></span> Dra. Janaína Cirqueira. Todos os direitos reservados.</p>
         </div>
     </footer>
+
+    <a class="whatsapp-float" href="https://wa.me/557799698881?text=Ol%C3%A1%21+Preciso+de+ajuda+com+meu+pet+e+vi+que+voc%C3%AA+trabalha+com+comportamento+e+sa%C3%BAde+emocional.+Pode+me+orientar%3F" target="_blank" rel="noopener noreferrer" aria-label="Abrir WhatsApp" title="Fale comigo pelo WhatsApp">
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+    </a>
 
     <script src="script.js"></script>
 </body>

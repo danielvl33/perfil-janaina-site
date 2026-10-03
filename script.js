@@ -49,6 +49,24 @@ if (themeToggle) {
     });
 }
 
+// Configure this value when the Instagram profile URL is available.
+const INSTAGRAM_URL = "COLOCAR_LINK_DO_INSTAGRAM_AQUI";
+const hasInstagramURL = /^https?:\/\/\S+$/i.test(INSTAGRAM_URL)
+    && INSTAGRAM_URL !== "COLOCAR_LINK_DO_INSTAGRAM_AQUI";
+
+document.querySelectorAll("[data-instagram-link]").forEach((link) => {
+    if (!hasInstagramURL) return;
+
+    link.href = INSTAGRAM_URL;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.title = "Visitar Instagram";
+    link.removeAttribute("aria-disabled");
+
+    const status = link.querySelector("[data-instagram-status]");
+    if (status) status.textContent = "Acompanhe no Instagram";
+});
+
 // ================================
 // CONTADOR DOS NÚMEROS
 // ================================
