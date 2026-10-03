@@ -49,22 +49,31 @@ if (themeToggle) {
     });
 }
 
-// Configure this value when the Instagram profile URL is available.
-const INSTAGRAM_URL = "COLOCAR_LINK_DO_INSTAGRAM_AQUI";
-const hasInstagramURL = /^https?:\/\/\S+$/i.test(INSTAGRAM_URL)
-    && INSTAGRAM_URL !== "COLOCAR_LINK_DO_INSTAGRAM_AQUI";
+document.querySelectorAll(".site-nav").forEach((navigation) => {
+    const toggle = navigation.querySelector(".nav-toggle");
+    const menu = navigation.querySelector(".site-nav-links");
+    if (!toggle || !menu) return;
 
-document.querySelectorAll("[data-instagram-link]").forEach((link) => {
-    if (!hasInstagramURL) return;
+    const closeMenu = () => {
+        navigation.classList.remove("menu-open");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-label", "Abrir menu");
+    };
 
-    link.href = INSTAGRAM_URL;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.title = "Visitar Instagram";
-    link.removeAttribute("aria-disabled");
+    toggle.addEventListener("click", () => {
+        const isOpen = toggle.getAttribute("aria-expanded") === "true";
+        navigation.classList.toggle("menu-open", !isOpen);
+        toggle.setAttribute("aria-expanded", String(!isOpen));
+        toggle.setAttribute("aria-label", isOpen ? "Abrir menu" : "Fechar menu");
+    });
 
-    const status = link.querySelector("[data-instagram-status]");
-    if (status) status.textContent = "Acompanhe no Instagram";
+    menu.addEventListener("click", (event) => {
+        if (event.target.closest("a")) closeMenu();
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeMenu();
+    });
 });
 
 const testimonialsGallery = document.getElementById("testimonialsGallery");

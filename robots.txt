@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://danielvl33.github.io/perfil-janaina-site/sitemap.xml

@@ -1,9 +1,13 @@
-# perfil-janaina
+# Mente Humano Animal
 
-O site inclui uma área de redes sociais e contato com QR Code local para WhatsApp.
+Site institucional de Dra. Janaína Cirqueira, com informações sobre sua atuação, programas, redes sociais e contato pelo WhatsApp.
 
-Para ativar o link do Instagram, edite a constante `INSTAGRAM_URL` no arquivo `script.js` e informe o endereço completo do perfil. Os links do Instagram no topo, na seção de contato e no rodapé serão atualizados automaticamente.
+## Páginas
 
-## Depoimentos
+- `index.html`: apresentação, programas, conteúdos, FAQ e contato.
+- `depoimentos.html`: galeria de depoimentos autorizados em `assets/depoimentos/`.
+- `links/`: página compacta com os canais oficiais e formas de contato.
 
-Os prints ficam em `assets/depoimentos/` e são exibidos pela página `depoimentos.html`. Para adicionar um print, salve a imagem com um nome como `depoimento-07.jpeg` nessa pasta e inclua o nome do arquivo no `manifest.json`. As imagens são mostradas sem recorte e podem ser ampliadas na galeria.
+Os links de redes sociais e WhatsApp são configurados diretamente no HTML. Para publicar novos depoimentos, adicione a imagem autorizada à pasta `assets/depoimentos/` e inclua seu nome no `manifest.json`. A galeria mostra os arquivos sem recorte e permite ampliá-los.
+
+O projeto é publicado pelo GitHub Pages; `sitemap.xml`, `robots.txt` e os metadados canônicos apontam para `https://danielvl33.github.io/perfil-janaina-site/`.
