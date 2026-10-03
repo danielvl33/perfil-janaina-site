@@ -11,7 +11,13 @@ if (yearElement) {
 // TEMA ESCURO (COM PERSISTÊNCIA)
 // ================================
 const themeToggle = document.getElementById("themeToggle");
-let darkMode = localStorage.getItem("theme") === "dark";
+let darkMode = false;
+
+try {
+    darkMode = localStorage.getItem("theme") === "dark";
+} catch (error) {
+    console.warn("Não foi possível recuperar a preferência de tema:", error);
+}
 
 const applyTheme = (isDark) => {
     if (!themeToggle) return;
@@ -23,17 +29,17 @@ const applyTheme = (isDark) => {
         document.documentElement.style.setProperty("--muted", "#aeb8b0");
         document.documentElement.style.setProperty("--border", "#303a32");
 
-        themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        themeToggle.innerHTML = '<i class="fa-solid fa-sun" aria-hidden="true"></i>';
         themeToggle.setAttribute("aria-label", "Ativar tema claro");
         document.body.classList.add("dark-theme");
     } else {
         document.documentElement.style.setProperty("--background", "#f8f7f3");
         document.documentElement.style.setProperty("--card", "#ffffff");
         document.documentElement.style.setProperty("--text", "#263229");
-        document.documentElement.style.setProperty("--muted", "#68736b");
+        document.documentElement.style.setProperty("--muted", "#606b63");
         document.documentElement.style.setProperty("--border", "#e5e5df");
 
-        themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        themeToggle.innerHTML = '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
         themeToggle.setAttribute("aria-label", "Ativar tema escuro");
         document.body.classList.remove("dark-theme");
     }
@@ -45,7 +51,11 @@ if (themeToggle) {
     themeToggle.addEventListener("click", () => {
         darkMode = !darkMode;
         applyTheme(darkMode);
-        localStorage.setItem("theme", darkMode ? "dark" : "light");
+        try {
+            localStorage.setItem("theme", darkMode ? "dark" : "light");
+        } catch (error) {
+            console.warn("Não foi possível salvar a preferência de tema:", error);
+        }
     });
 }
 
@@ -54,10 +64,11 @@ document.querySelectorAll(".site-nav").forEach((navigation) => {
     const menu = navigation.querySelector(".site-nav-links");
     if (!toggle || !menu) return;
 
-    const closeMenu = () => {
+    const closeMenu = (restoreFocus = false) => {
         navigation.classList.remove("menu-open");
         toggle.setAttribute("aria-expanded", "false");
         toggle.setAttribute("aria-label", "Abrir menu");
+        if (restoreFocus) toggle.focus();
     };
 
     toggle.addEventListener("click", () => {
@@ -72,7 +83,9 @@ document.querySelectorAll(".site-nav").forEach((navigation) => {
     });
 
     document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") closeMenu();
+        if (event.key === "Escape" && navigation.classList.contains("menu-open")) {
+            closeMenu(true);
+        }
     });
 });
 
