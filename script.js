@@ -53,8 +53,11 @@ if (themeToggle) {
 // CONTADOR DOS NÚMEROS
 // ================================
 const counters = document.querySelectorAll("[data-number]");
+const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+).matches;
 
-if ("IntersectionObserver" in window) {
+if ("IntersectionObserver" in window && !prefersReducedMotion) {
     const observer = new IntersectionObserver(
         (entries) => {
             entries.forEach((entry) => {
@@ -99,7 +102,7 @@ const animatedElements = document.querySelectorAll(
     ".info-card, .mentoria, .highlight-card"
 );
 
-if ("IntersectionObserver" in window) {
+if ("IntersectionObserver" in window && !prefersReducedMotion) {
     const animationObserver = new IntersectionObserver(
         (entries) => {
             entries.forEach((entry) => {
