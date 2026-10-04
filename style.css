@@ -682,6 +682,31 @@ body.dark-theme .testimonial-card {
     object-position: center;
 }
 
+.limits-title {
+    margin-bottom: 24px;
+}
+
+.limits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.limit-card {
+    padding: 26px 24px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.35);
+    box-shadow: 0 12px 30px rgba(35, 50, 40, .04);
+}
+
+.limit-card p {
+    color: var(--muted);
+    margin: 0;
+}
+
 .about-text p {
     color: var(--muted);
     margin-bottom: 20px;
@@ -1422,7 +1447,7 @@ footer {
 }
 
 @media (max-width: 850px) {
-    .about-grid, .birds-content, .psicoespiritual-grid, .silvestres-layout { grid-template-columns: 1fr; }
+    .about-grid, .birds-content, .psicoespiritual-grid, .silvestres-layout, .limits-grid { grid-template-columns: 1fr; }
     .cards-grid, .mentorias-grid { grid-template-columns: repeat(2, 1fr); }
     .stats { grid-template-columns: 1fr; }
     .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,.12); }
