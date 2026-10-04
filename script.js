@@ -1,3 +1,441 @@
+const REVIEW_STORAGE_KEY = "janainaReviewsStorage";
+
+const escapeHtml = (value = "") => value.replace(/[&<>\"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+}[char]));
+
+const getReviews = () => {
+    try {
+        const stored = localStorage.getItem(REVIEW_STORAGE_KEY);
+        if (!stored) return [];
+        const parsed = JSON.parse(stored);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+        console.warn("Não foi possível recuperar comentários salvos:", error);
+        return [];
+    }
+};
+
+const saveReviews = (reviews) => {
+    try {
+        localStorage.setItem(REVIEW_STORAGE_KEY, JSON.stringify(reviews));
+        return true;
+    } catch (error) {
+        console.warn("Não foi possível salvar comentários:", error);
+        return false;
+    }
+};
+
+const formatReviewDate = (value) => {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "Data indisponível";
+    return date.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+};
+
+const createStars = (rating) => "★".repeat(rating) + "☆".repeat(5 - rating);
+
+const renderPublicReviews = () => {
+    const publicReviewsList = document.getElementById("publicReviewsList");
+    const publicAverageRating = document.getElementById("publicAverageRating");
+    const publicReviewCount = document.getElementById("publicReviewCount");
+
+    if (!publicReviewsList || !publicAverageRating || !publicReviewCount) return;
+
+    const approvedReviews = getReviews().filter((review) => review.status === "approved");
+
+    if (!approvedReviews.length) {
+        publicReviewsList.innerHTML = '<p class="review-empty">Ainda não há avaliações aprovadas para exibir.</p>';
+        publicAverageRating.textContent = "5.0 ★★★★★";
+        publicReviewCount.textContent = "Baseado em 0 avaliações";
+        return;
+    }
+
+    const total = approvedReviews.reduce((sum, review) => sum + Number(review.rating || 0), 0);
+    const average = (total / approvedReviews.length).toFixed(1);
+    publicAverageRating.textContent = `${average} ${createStars(Math.round(Number(average)))}`;
+    publicReviewCount.textContent = `Baseado em ${approvedReviews.length} ${approvedReviews.length === 1 ? "avaliação" : "avaliações"}`;
+
+    publicReviewsList.innerHTML = approvedReviews
+        .map((review) => `
+            <article class="public-review-card">
+                <div class="public-review-header">
+                    <div class="public-review-person">
+                        <div class="public-review-avatar">${escapeHtml((review.name || "A").charAt(0).toUpperCase())}</div>
+                        <div>
+                            <h3>${escapeHtml(review.name || "Cliente")}</h3>
+                            <p>${formatReviewDate(review.createdAt)}</p>
+                        </div>
+                    </div>
+                    <span class="public-review-stars" aria-label="${review.rating} de 5 estrelas">${createStars(Number(review.rating || 5))}</span>
+                </div>
+                <p class="public-review-text">“${escapeHtml(review.comment || "")}"</p>
+            </article>
+        `)
+        .join("");
+};
+
+const renderReviewStatus = (status) => {
+    const labels = {
+        pending: "Pendente",
+        approved: "Aprovada",
+        rejected: "Rejeitada",
+    };
+
+    return `<span class="status-badge status-${status}">${labels[status] || status}</span>`;
+};
+
+const openReviewDialog = () => {
+    const dialog = document.getElementById("reviewDialog");
+    if (!dialog) return;
+    dialog.showModal();
+    const nameInput = document.getElementById("reviewName");
+    if (nameInput) nameInput.focus();
+};
+
+const closeReviewDialog = () => {
+    const dialog = document.getElementById("reviewDialog");
+    if (!dialog) return;
+    dialog.close();
+};
+
+const setupReviewForm = () => {
+    const dialog = document.getElementById("reviewDialog");
+    const form = document.getElementById("reviewForm");
+    const formStatus = document.getElementById("reviewFormStatus");
+    const openButton = document.getElementById("openReviewDialogBtn");
+    const cancelButton = document.getElementById("cancelReviewBtn");
+    const closeButton = document.getElementById("closeReviewDialogBtn");
+    const ratingInput = document.getElementById("reviewRating");
+    const starButtons = [...document.querySelectorAll(".star-button")];
+
+    if (!dialog || !form || !ratingInput || !starButtons.length) return;
+
+    const resetStars = () => {
+        starButtons.forEach((button) => {
+            button.textContent = "☆";
+            button.classList.remove("is-active");
+        });
+        ratingInput.value = "";
+    };
+
+    const setStars = (value) => {
+        starButtons.forEach((button) => {
+            const isActive = Number(button.dataset.value) <= Number(value);
+            button.textContent = isActive ? "★" : "☆";
+            button.classList.toggle("is-active", isActive);
+        });
+        ratingInput.value = String(value);
+    };
+
+    starButtons.forEach((button) => {
+        button.addEventListener("click", () => setStars(Number(button.dataset.value)));
+        button.addEventListener("mouseenter", () => setStars(Number(button.dataset.value)));
+        button.addEventListener("mouseleave", () => {
+            const currentValue = Number(ratingInput.value || 0);
+            if (!currentValue) resetStars();
+            else setStars(currentValue);
+        });
+    });
+
+    if (openButton) openButton.addEventListener("click", openReviewDialog);
+    if (cancelButton) cancelButton.addEventListener("click", closeReviewDialog);
+    if (closeButton) closeButton.addEventListener("click", closeReviewDialog);
+
+    dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) closeReviewDialog();
+    });
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const name = (form.elements.name.value || "").trim();
+        const email = (form.elements.email.value || "").trim();
+        const rating = Number(form.elements.rating.value || 0);
+        const comment = (form.elements.comment.value || "").trim();
+        const consent = form.elements.consent.checked;
+        const file = form.elements.photo.files?.[0];
+
+        if (!name || !comment || !consent || !rating) {
+            formStatus.textContent = "Preencha nome, avaliação, depoimento e autorização para continuar.";
+            formStatus.classList.add("is-error");
+            return;
+        }
+
+        if (comment.length < 20) {
+            formStatus.textContent = "O depoimento deve ter pelo menos 20 caracteres.";
+            formStatus.classList.add("is-error");
+            return;
+        }
+
+        if (file) {
+            const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+            if (!allowedTypes.includes(file.type)) {
+                formStatus.textContent = "Tipo de imagem inválido. Use JPG, JPEG, PNG ou WEBP.";
+                formStatus.classList.add("is-error");
+                return;
+            }
+
+            if (file.size > 2 * 1024 * 1024) {
+                formStatus.textContent = "A imagem deve ter até 2 MB.";
+                formStatus.classList.add("is-error");
+                return;
+            }
+        }
+
+        const nextReviews = getReviews();
+        const review = {
+            id: crypto.randomUUID ? crypto.randomUUID() : `review-${Date.now()}`,
+            name,
+            email,
+            rating,
+            comment,
+            photo: "",
+            status: "pending",
+            consent,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        };
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                review.photo = String(reader.result || "");
+                nextReviews.unshift(review);
+                if (!saveReviews(nextReviews)) {
+                    formStatus.textContent = "Não foi possível salvar sua avaliação. Tente novamente.";
+                    formStatus.classList.add("is-error");
+                    return;
+                }
+                form.reset();
+                resetStars();
+                formStatus.textContent = "Obrigado pelo seu depoimento! Sua avaliação será analisada antes de ser publicada.";
+                formStatus.classList.remove("is-error");
+                renderPublicReviews();
+                setTimeout(() => closeReviewDialog(), 1600);
+            };
+            reader.readAsDataURL(file);
+            return;
+        }
+
+        nextReviews.unshift(review);
+        if (!saveReviews(nextReviews)) {
+            formStatus.textContent = "Não foi possível salvar sua avaliação. Tente novamente.";
+            formStatus.classList.add("is-error");
+            return;
+        }
+
+        form.reset();
+        resetStars();
+        formStatus.textContent = "Obrigado pelo seu depoimento! Sua avaliação será analisada antes de ser publicada.";
+        formStatus.classList.remove("is-error");
+        renderPublicReviews();
+        setTimeout(() => closeReviewDialog(), 1600);
+    });
+};
+
+const initAdminDashboard = () => {
+    const adminPage = document.body.dataset.page === "admin";
+    if (!adminPage) return;
+
+    const list = document.getElementById("adminReviewsList");
+    const stats = {
+        total: document.getElementById("adminTotalReviews"),
+        pending: document.getElementById("adminPendingReviews"),
+        approved: document.getElementById("adminApprovedReviews"),
+        rejected: document.getElementById("adminRejectedReviews"),
+        average: document.getElementById("adminAverageRating"),
+    };
+    const statusFilter = document.getElementById("adminStatusFilter");
+    const searchInput = document.getElementById("adminSearch");
+    const starFilter = document.getElementById("adminStarFilter");
+    const modal = document.getElementById("adminReviewModal");
+    const modalContent = document.getElementById("adminReviewModalContent");
+    const closeModalBtn = document.getElementById("adminCloseModalBtn");
+    const editForm = document.getElementById("adminEditForm");
+
+    if (!list || !stats.total) return;
+
+    const renderStats = (reviews) => {
+        const pending = reviews.filter((review) => review.status === "pending").length;
+        const approved = reviews.filter((review) => review.status === "approved").length;
+        const rejected = reviews.filter((review) => review.status === "rejected").length;
+        const totalValue = reviews.reduce((sum, review) => sum + Number(review.rating || 0), 0);
+        const avg = reviews.length ? (totalValue / reviews.length).toFixed(1) : "0.0";
+
+        stats.total.textContent = String(reviews.length);
+        stats.pending.textContent = String(pending);
+        stats.approved.textContent = String(approved);
+        stats.rejected.textContent = String(rejected);
+        stats.average.textContent = `${avg} ⭐`;
+    };
+
+    const getFilteredReviews = () => {
+        const reviews = getReviews();
+        const status = statusFilter ? statusFilter.value : "all";
+        const star = starFilter ? starFilter.value : "all";
+        const term = (searchInput ? searchInput.value : "").trim().toLowerCase();
+
+        return reviews.filter((review) => {
+            const matchesStatus = status === "all" || review.status === status;
+            const matchesStar = star === "all" || Number(review.rating) === Number(star);
+            const matchesSearch = !term || `${review.name} ${review.comment}`.toLowerCase().includes(term);
+            return matchesStatus && matchesStar && matchesSearch;
+        });
+    };
+
+    const openModal = (reviewId) => {
+        if (!modal || !modalContent) return;
+        const review = getReviews().find((item) => item.id === reviewId);
+        if (!review) return;
+
+        modalContent.innerHTML = `
+            <div class="review-detail-card">
+                <div class="review-detail-head">
+                    <div>
+                        <h3>${escapeHtml(review.name || "Cliente")}</h3>
+                        <p>${formatReviewDate(review.createdAt)} · ${renderReviewStatus(review.status)}</p>
+                    </div>
+                    ${review.photo ? `<img src="${review.photo}" alt="Foto de ${escapeHtml(review.name || "cliente")}" class="review-detail-photo">` : ""}
+                </div>
+                <p class="review-detail-stars">${createStars(Number(review.rating || 0))}</p>
+                <p class="review-detail-text">${escapeHtml(review.comment || "")}</p>
+                <div class="review-detail-meta">
+                    <span>Email: ${escapeHtml(review.email || "Não informado")}</span>
+                    <span>Consentimento: ${review.consent ? "Sim" : "Não"}</span>
+                </div>
+                <div class="review-detail-actions">
+                    <button type="button" data-action="approve" data-id="${review.id}" class="btn small success">Aprovar</button>
+                    <button type="button" data-action="reject" data-id="${review.id}" class="btn small warning">Rejeitar</button>
+                    <button type="button" data-action="edit" data-id="${review.id}" class="btn small">Editar</button>
+                    <button type="button" data-action="delete" data-id="${review.id}" class="btn small danger">Excluir</button>
+                </div>
+            </div>
+        `;
+
+        modal.showModal();
+    };
+
+    const closeModal = () => {
+        if (modal) modal.close();
+    };
+
+    const renderList = () => {
+        const reviews = getFilteredReviews();
+        renderStats(getReviews());
+
+        if (!reviews.length) {
+            list.innerHTML = '<div class="admin-empty">Nenhum resultado encontrado.</div>';
+            return;
+        }
+
+        list.innerHTML = reviews.map((review) => `
+            <article class="admin-review-item status-${review.status}">
+                <div class="admin-review-main">
+                    ${review.photo ? `<img src="${review.photo}" alt="${escapeHtml(review.name || "Cliente")}" class="admin-review-thumb">` : '<div class="admin-review-thumb placeholder">Foto</div>'}
+                    <div class="admin-review-copy">
+                        <div class="admin-review-header">
+                            <h3>${escapeHtml(review.name || "Cliente")}</h3>
+                            ${renderReviewStatus(review.status)}
+                        </div>
+                        <p class="admin-review-stars">${createStars(Number(review.rating || 0))}</p>
+                        <p>${escapeHtml((review.comment || "").slice(0, 140))}${(review.comment || "").length > 140 ? "…" : ""}</p>
+                        <small>${formatReviewDate(review.createdAt)}</small>
+                    </div>
+                </div>
+                <div class="admin-review-actions">
+                    <button type="button" data-action="view" data-id="${review.id}" class="btn small">Visualizar</button>
+                    <button type="button" data-action="approve" data-id="${review.id}" class="btn small success">Aprovar</button>
+                    <button type="button" data-action="reject" data-id="${review.id}" class="btn small warning">Rejeitar</button>
+                    <button type="button" data-action="edit" data-id="${review.id}" class="btn small">Editar</button>
+                    <button type="button" data-action="delete" data-id="${review.id}" class="btn small danger">Excluir</button>
+                </div>
+            </article>
+        `).join("");
+    };
+
+    const updateReviewStatus = (reviewId, status) => {
+        const reviews = getReviews();
+        const next = reviews.map((review) => review.id === reviewId ? { ...review, status, updatedAt: new Date().toISOString() } : review);
+        saveReviews(next);
+        renderList();
+    };
+
+    const deleteReview = (reviewId) => {
+        const confirmed = window.confirm("Tem certeza que deseja excluir este depoimento? Esta ação não poderá ser desfeita.");
+        if (!confirmed) return;
+        const reviews = getReviews().filter((review) => review.id !== reviewId);
+        saveReviews(reviews);
+        closeModal();
+        renderList();
+    };
+
+    if (statusFilter) statusFilter.addEventListener("change", renderList);
+    if (starFilter) starFilter.addEventListener("change", renderList);
+    if (searchInput) searchInput.addEventListener("input", renderList);
+
+    document.body.addEventListener("click", (event) => {
+        const button = event.target.closest("button");
+        if (!button) return;
+        const action = button.dataset.action;
+        const reviewId = button.dataset.id;
+        if (!action || !reviewId) return;
+
+        if (action === "view") openModal(reviewId);
+        if (action === "approve") updateReviewStatus(reviewId, "approved");
+        if (action === "reject") updateReviewStatus(reviewId, "rejected");
+        if (action === "delete") deleteReview(reviewId);
+        if (action === "edit") {
+            const reviews = getReviews();
+            const review = reviews.find((item) => item.id === reviewId);
+            if (!review) return;
+            editForm.elements.id.value = review.id;
+            editForm.elements.editName.value = review.name || "";
+            editForm.elements.editComment.value = review.comment || "";
+            editForm.elements.editRating.value = String(review.rating || 5);
+            editForm.elements.editStatus.value = review.status || "pending";
+            document.getElementById("adminEditPanel").hidden = false;
+        }
+    });
+
+    if (closeModalBtn) closeModalBtn.addEventListener("click", closeModal);
+    modal?.addEventListener("click", (event) => {
+        if (event.target === modal) closeModal();
+    });
+
+    document.body.addEventListener("click", (event) => {
+        const target = event.target.closest("[data-action='approve']");
+        if (!target) return;
+        const reviewId = target.dataset.id;
+        if (reviewId) updateReviewStatus(reviewId, "approved");
+    });
+
+    if (editForm) {
+        editForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const reviewId = editForm.elements.id.value;
+            const updates = {
+                name: (editForm.elements.editName.value || "").trim(),
+                comment: (editForm.elements.editComment.value || "").trim(),
+                rating: Number(editForm.elements.editRating.value || 5),
+                status: editForm.elements.editStatus.value,
+                updatedAt: new Date().toISOString(),
+            };
+
+            if (!updates.name || !updates.comment) return;
+            const reviews = getReviews().map((review) => review.id === reviewId ? { ...review, ...updates } : review);
+            saveReviews(reviews);
+            editForm.reset();
+            document.getElementById("adminEditPanel").hidden = true;
+            renderList();
+        });
+    }
+
+    renderList();
+};
+
 // ================================
 // ANO AUTOMÁTICO
 // ================================

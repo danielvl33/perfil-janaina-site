@@ -50,6 +50,26 @@
     </header>
 
     <main class="testimonials-main">
+        <section class="review-summary" aria-labelledby="review-summary-title">
+            <div class="section-title stories-title">
+                <span>Experiências compartilhadas</span>
+                <h2 id="review-summary-title">Histórias de quem vivenciou esse cuidado</h2>
+            </div>
+            <p class="review-summary-subtitle">Cada experiência representa uma história, um vínculo e um caminho de cuidado.</p>
+            <div class="review-summary-grid">
+                <div class="review-summary-card">
+                    <span class="review-summary-label">Avaliação dos clientes</span>
+                    <strong id="publicAverageRating">5.0 ★★★★★</strong>
+                    <small id="publicReviewCount">Baseado em 0 avaliações</small>
+                </div>
+                <div class="review-summary-card review-summary-actions">
+                    <p>Quer compartilhar sua experiência?</p>
+                    <button class="btn primary" id="openReviewDialogBtn" type="button">Deixar minha avaliação</button>
+                </div>
+            </div>
+            <div id="publicReviewsList" class="public-review-list" aria-live="polite"></div>
+        </section>
+
         <section class="testimonials-section" aria-labelledby="testimonials-title">
             <h2 class="visually-hidden" id="testimonials-title">Galeria de depoimentos</h2>
             <div class="testimonials-gallery" id="testimonialsGallery" aria-live="polite" aria-busy="true"></div>
@@ -62,6 +82,60 @@
             <a class="btn primary" href="https://wa.me/557799698881?text=Ol%C3%A1%21+Preciso+de+ajuda+com+meu+pet+e+vi+que+voc%C3%AA+trabalha+com+comportamento+e+sa%C3%BAde+emocional.+Pode+me+orientar%3F" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Falar pelo WhatsApp</a>
         </section>
     </main>
+
+    <dialog class="review-dialog" id="reviewDialog" aria-labelledby="reviewDialogTitle">
+        <div class="review-dialog-header">
+            <h3 id="reviewDialogTitle">Deixar minha avaliação</h3>
+            <button class="dialog-close" type="button" id="closeReviewDialogBtn" aria-label="Fechar formulário">×</button>
+        </div>
+
+        <form id="reviewForm" novalidate>
+            <div class="form-grid">
+                <div class="field">
+                    <label for="reviewName">Nome</label>
+                    <input id="reviewName" name="name" type="text" maxlength="80" required>
+                </div>
+                <div class="field">
+                    <label for="reviewEmail">E-mail</label>
+                    <input id="reviewEmail" name="email" type="email" maxlength="120" placeholder="Opcional">
+                </div>
+            </div>
+
+            <fieldset class="rating-fieldset">
+                <legend>Avaliação</legend>
+                <div class="star-rating" aria-label="Selecione de 1 a 5 estrelas" role="radiogroup">
+                    <button type="button" class="star-button" data-value="1" aria-label="1 estrela">☆</button>
+                    <button type="button" class="star-button" data-value="2" aria-label="2 estrelas">☆</button>
+                    <button type="button" class="star-button" data-value="3" aria-label="3 estrelas">☆</button>
+                    <button type="button" class="star-button" data-value="4" aria-label="4 estrelas">☆</button>
+                    <button type="button" class="star-button" data-value="5" aria-label="5 estrelas">☆</button>
+                </div>
+                <input id="reviewRating" name="rating" type="hidden" required>
+            </fieldset>
+
+            <div class="field">
+                <label for="reviewComment">Depoimento</label>
+                <textarea id="reviewComment" name="comment" maxlength="600" rows="5" required placeholder="Conte sua experiência..."></textarea>
+            </div>
+
+            <div class="field file-field">
+                <label for="reviewPhoto">Foto (opcional)</label>
+                <input id="reviewPhoto" name="photo" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+                <small>Formatos aceitos: JPG, JPEG, PNG e WEBP. Até 2 MB.</small>
+            </div>
+
+            <label class="checkbox-row" for="reviewConsent">
+                <input id="reviewConsent" name="consent" type="checkbox" required>
+                <span>Autorizo a publicação do meu depoimento no site.</span>
+            </label>
+
+            <div class="form-actions">
+                <button class="btn secondary" type="button" id="cancelReviewBtn">Cancelar</button>
+                <button class="btn primary" type="submit">Enviar avaliação</button>
+            </div>
+            <p class="form-status" id="reviewFormStatus" role="status" aria-live="polite"></p>
+        </form>
+    </dialog>
 
     <dialog class="testimonial-lightbox" id="testimonialLightbox" aria-label="Visualização ampliada dos depoimentos">
         <div class="lightbox-toolbar">
