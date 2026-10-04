@@ -236,9 +236,6 @@ const setupReviewForm = () => {
     });
 };
 
-renderPublicReviews();
-setupReviewForm();
-
 const initAdminDashboard = () => {
     const adminPage = document.body.dataset.page === "admin";
     if (!adminPage) return;
@@ -439,58 +436,51 @@ const initAdminDashboard = () => {
     renderList();
 };
 
-initAdminDashboard();
-
-// ================================
-// ANO AUTOMÁTICO
-// ================================
-const yearElement = document.getElementById("year");
-
-if (yearElement) {
-    yearElement.textContent = new Date().getFullYear();
-}
-
-// ================================
-// TEMA ESCURO (COM PERSISTÊNCIA)
-// ================================
-const themeToggle = document.getElementById("themeToggle");
-let darkMode = false;
-
-try {
-    darkMode = localStorage.getItem("theme") === "dark";
-} catch (error) {
-    console.warn("Não foi possível recuperar a preferência de tema:", error);
-}
-
-const applyTheme = (isDark) => {
-    if (!themeToggle) return;
-
-    if (isDark) {
-        document.documentElement.style.setProperty("--background", "#151b17");
-        document.documentElement.style.setProperty("--card", "#202820");
-        document.documentElement.style.setProperty("--text", "#f1f3ef");
-        document.documentElement.style.setProperty("--muted", "#aeb8b0");
-        document.documentElement.style.setProperty("--border", "#303a32");
-
-        themeToggle.innerHTML = '<i class="fa-solid fa-sun" aria-hidden="true"></i>';
-        themeToggle.setAttribute("aria-label", "Ativar tema claro");
-        document.body.classList.add("dark-theme");
-    } else {
-        document.documentElement.style.setProperty("--background", "#f8f7f3");
-        document.documentElement.style.setProperty("--card", "#ffffff");
-        document.documentElement.style.setProperty("--text", "#263229");
-        document.documentElement.style.setProperty("--muted", "#606b63");
-        document.documentElement.style.setProperty("--border", "#e5e5df");
-
-        themeToggle.innerHTML = '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
-        themeToggle.setAttribute("aria-label", "Ativar tema escuro");
-        document.body.classList.remove("dark-theme");
+const initYear = () => {
+    const yearElement = document.getElementById("year");
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
     }
 };
 
-applyTheme(darkMode);
+const initTheme = () => {
+    const themeToggle = document.getElementById("themeToggle");
+    if (!themeToggle) return;
 
-if (themeToggle) {
+    let darkMode = false;
+
+    try {
+        darkMode = localStorage.getItem("theme") === "dark";
+    } catch (error) {
+        console.warn("Não foi possível recuperar a preferência de tema:", error);
+    }
+
+    const applyTheme = (isDark) => {
+        if (isDark) {
+            document.documentElement.style.setProperty("--background", "#151b17");
+            document.documentElement.style.setProperty("--card", "#202820");
+            document.documentElement.style.setProperty("--text", "#f1f3ef");
+            document.documentElement.style.setProperty("--muted", "#aeb8b0");
+            document.documentElement.style.setProperty("--border", "#303a32");
+
+            themeToggle.innerHTML = '<i class="fa-solid fa-sun" aria-hidden="true"></i>';
+            themeToggle.setAttribute("aria-label", "Ativar tema claro");
+            document.body.classList.add("dark-theme");
+        } else {
+            document.documentElement.style.setProperty("--background", "#f8f7f3");
+            document.documentElement.style.setProperty("--card", "#ffffff");
+            document.documentElement.style.setProperty("--text", "#263229");
+            document.documentElement.style.setProperty("--muted", "#606b63");
+            document.documentElement.style.setProperty("--border", "#e5e5df");
+
+            themeToggle.innerHTML = '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
+            themeToggle.setAttribute("aria-label", "Ativar tema escuro");
+            document.body.classList.remove("dark-theme");
+        }
+    };
+
+    applyTheme(darkMode);
+
     themeToggle.addEventListener("click", () => {
         darkMode = !darkMode;
         applyTheme(darkMode);
@@ -500,42 +490,46 @@ if (themeToggle) {
             console.warn("Não foi possível salvar a preferência de tema:", error);
         }
     });
-}
+};
 
-document.querySelectorAll(".site-nav").forEach((navigation) => {
-    const toggle = navigation.querySelector(".nav-toggle");
-    const menu = navigation.querySelector(".site-nav-links");
-    if (!toggle || !menu) return;
+const initNavigation = () => {
+    document.querySelectorAll(".site-nav").forEach((navigation) => {
+        const toggle = navigation.querySelector(".nav-toggle");
+        const menu = navigation.querySelector(".site-nav-links");
+        if (!toggle || !menu) return;
 
-    const closeMenu = (restoreFocus = false) => {
-        navigation.classList.remove("menu-open");
-        toggle.setAttribute("aria-expanded", "false");
-        toggle.setAttribute("aria-label", "Abrir menu");
-        if (restoreFocus) toggle.focus();
-    };
+        const closeMenu = (restoreFocus = false) => {
+            navigation.classList.remove("menu-open");
+            toggle.setAttribute("aria-expanded", "false");
+            toggle.setAttribute("aria-label", "Abrir menu");
+            if (restoreFocus) toggle.focus();
+        };
 
-    toggle.addEventListener("click", () => {
-        const isOpen = toggle.getAttribute("aria-expanded") === "true";
-        navigation.classList.toggle("menu-open", !isOpen);
-        toggle.setAttribute("aria-expanded", String(!isOpen));
-        toggle.setAttribute("aria-label", isOpen ? "Abrir menu" : "Fechar menu");
+        toggle.addEventListener("click", () => {
+            const isOpen = toggle.getAttribute("aria-expanded") === "true";
+            navigation.classList.toggle("menu-open", !isOpen);
+            toggle.setAttribute("aria-expanded", String(!isOpen));
+            toggle.setAttribute("aria-label", isOpen ? "Abrir menu" : "Fechar menu");
+        });
+
+        menu.addEventListener("click", (event) => {
+            if (event.target.closest("a")) closeMenu();
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && navigation.classList.contains("menu-open")) {
+                closeMenu(true);
+            }
+        });
     });
+};
 
-    menu.addEventListener("click", (event) => {
-        if (event.target.closest("a")) closeMenu();
-    });
+const initTestimonialsGallery = () => {
+    const testimonialsGallery = document.getElementById("testimonialsGallery");
+    const testimonialLightbox = document.getElementById("testimonialLightbox");
 
-    document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && navigation.classList.contains("menu-open")) {
-            closeMenu(true);
-        }
-    });
-});
+    if (!testimonialsGallery || !testimonialLightbox) return;
 
-const testimonialsGallery = document.getElementById("testimonialsGallery");
-const testimonialLightbox = document.getElementById("testimonialLightbox");
-
-if (testimonialsGallery && testimonialLightbox) {
     const lightboxImage = document.getElementById("lightboxImage");
     const lightboxCounter = document.getElementById("lightboxCounter");
     const lightboxClose = document.getElementById("lightboxClose");
@@ -650,86 +644,99 @@ if (testimonialsGallery && testimonialLightbox) {
             console.error("Erro ao carregar a galeria de depoimentos:", error);
         })
         .finally(() => testimonialsGallery.setAttribute("aria-busy", "false"));
-}
+};
 
-// ================================
-// CONTADOR DOS NÚMEROS
-// ================================
-const counters = document.querySelectorAll("[data-number]");
-const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-).matches;
+const initCounters = () => {
+    const counters = document.querySelectorAll("[data-number]");
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-if ("IntersectionObserver" in window && !prefersReducedMotion) {
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (!entry.isIntersecting) return;
+    if ("IntersectionObserver" in window && !prefersReducedMotion) {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
 
-                const element = entry.target;
-                const target = Number(element.dataset.number);
-                let current = 0;
-                const duration = 1500;
-                const increment = target / (duration / 16);
+                    const element = entry.target;
+                    const target = Number(element.dataset.number);
+                    let current = 0;
+                    const duration = 1500;
+                    const increment = target / (duration / 16);
 
-                const update = () => {
-                    current += increment;
+                    const update = () => {
+                        current += increment;
 
-                    if (current >= target) {
-                        element.textContent = target.toLocaleString("pt-BR");
-                        return;
-                    }
+                        if (current >= target) {
+                            element.textContent = target.toLocaleString("pt-BR");
+                            return;
+                        }
 
-                    element.textContent = Math.floor(current).toLocaleString("pt-BR");
-                    requestAnimationFrame(update);
-                };
+                        element.textContent = Math.floor(current).toLocaleString("pt-BR");
+                        requestAnimationFrame(update);
+                    };
 
-                update();
-                observer.unobserve(element);
-            });
-        },
-        { threshold: 0.5 }
-    );
+                    update();
+                    observer.unobserve(element);
+                });
+            },
+            { threshold: 0.5 }
+        );
 
-    counters.forEach((counter) => observer.observe(counter));
-} else {
+        counters.forEach((counter) => observer.observe(counter));
+        return;
+    }
+
     counters.forEach((counter) => {
         counter.textContent = Number(counter.dataset.number).toLocaleString("pt-BR");
     });
-}
+};
 
-// ================================
-// ANIMAÇÃO AO ROLAR
-// ================================
-const animatedElements = document.querySelectorAll(
-    ".info-card, .mentoria, .highlight-card"
-);
+const initRevealAnimations = () => {
+    const animatedElements = document.querySelectorAll(".info-card, .mentoria, .highlight-card");
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-if ("IntersectionObserver" in window && !prefersReducedMotion) {
-    const animationObserver = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = "1";
-                    entry.target.style.transform = "translateY(0)";
-                    animationObserver.unobserve(entry.target);
-                }
-            });
-        },
-        { threshold: 0.15 }
-    );
+    if ("IntersectionObserver" in window && !prefersReducedMotion) {
+        const animationObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = "1";
+                        entry.target.style.transform = "translateY(0)";
+                        animationObserver.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.15 }
+        );
 
-    animatedElements.forEach((element) => {
-        element.style.opacity = "0";
-        element.style.transform = "translateY(25px)";
-        element.style.transition =
-            "opacity .6s ease, transform .6s ease";
+        animatedElements.forEach((element) => {
+            element.style.opacity = "0";
+            element.style.transform = "translateY(25px)";
+            element.style.transition = "opacity .6s ease, transform .6s ease";
+            animationObserver.observe(element);
+        });
+        return;
+    }
 
-        animationObserver.observe(element);
-    });
-} else {
     animatedElements.forEach((element) => {
         element.style.opacity = "1";
         element.style.transform = "translateY(0)";
     });
+};
+
+const initSite = () => {
+    renderPublicReviews();
+    setupReviewForm();
+    initAdminDashboard();
+    initYear();
+    initTheme();
+    initNavigation();
+    initTestimonialsGallery();
+    initCounters();
+    initRevealAnimations();
+};
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSite);
+} else {
+    initSite();
 }
