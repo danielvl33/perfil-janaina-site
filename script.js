@@ -236,6 +236,9 @@ const setupReviewForm = () => {
     });
 };
 
+renderPublicReviews();
+setupReviewForm();
+
 const initAdminDashboard = () => {
     const adminPage = document.body.dataset.page === "admin";
     if (!adminPage) return;
@@ -435,6 +438,8 @@ const initAdminDashboard = () => {
 
     renderList();
 };
+
+initAdminDashboard();
 
 // ================================
 // ANO AUTOMÁTICO
