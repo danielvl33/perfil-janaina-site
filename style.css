@@ -764,6 +764,63 @@ body.dark-theme .testimonial-card {
     align-items: center;
 }
 
+.silvestres-layout {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 36px;
+    align-items: center;
+}
+
+.silvestres-copy {
+    display: grid;
+    gap: 18px;
+}
+
+.silvestres-copy p,
+.behavior-block p,
+.specialty-list li {
+    color: var(--muted);
+}
+
+.specialty-list {
+    margin-top: 10px;
+}
+
+.specialty-list h3,
+.behavior-block h3 {
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+    color: var(--text);
+}
+
+.specialty-list ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 24px;
+    padding-left: 20px;
+}
+
+.behavior-block {
+    margin-top: 10px;
+}
+
+.silvestres-visual {
+    margin: 0;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    background: #dbeee9;
+}
+
+.silvestres-visual img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 460px;
+    object-fit: cover;
+    object-position: center;
+}
+
 .experience-number {
     display: flex;
     align-items: center;
@@ -1365,14 +1422,14 @@ footer {
 }
 
 @media (max-width: 850px) {
-    .about-grid, .birds-content, .psicoespiritual-grid { grid-template-columns: 1fr; }
+    .about-grid, .birds-content, .psicoespiritual-grid, .silvestres-layout { grid-template-columns: 1fr; }
     .cards-grid, .mentorias-grid { grid-template-columns: repeat(2, 1fr); }
     .stats { grid-template-columns: 1fr; }
     .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,.12); }
     .contact-layout { grid-template-columns: 1fr; }
     .contact-qr { width: min(100%, 520px); margin: auto; }
     .testimonials-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .psicoespiritual-visual img { min-height: 320px; }
+    .psicoespiritual-visual img, .silvestres-visual img { min-height: 320px; }
     .connection-band { align-items: flex-start; flex-direction: column; padding: 60px 4%; }
 }
 
